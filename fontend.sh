@@ -1,5 +1,5 @@
-log_file= /tmp/expense.logs
-component= frontend
+log_file= "/tmp/expense.logs"
+component= "frontend"
 
 echo "installing nginx"
 dnf install nginx -y >> $log_file
