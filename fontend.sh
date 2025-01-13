@@ -1,4 +1,4 @@
-log_file=/tmp/expense.logs
+source common.sh
 component=frontend
 
 echo "installing nginx"
@@ -12,12 +12,9 @@ cp expense.conf /etc/nginx/default.d/expense.conf >>$log_file
 echo "removing the default nginx content"
 rm -rf /usr/share/nginx/html/* 
 
-curl -o /tmp/$component.zip https://expense-artifacts.s3.amazonaws.com/$component.zip >>$log_file
-
 cd /usr/share/nginx/html
 
-echo "extracting the zipfiles"
-unzip /tmp/$component.zip >>$log_file
+download and extract
 
 systemctl enable nginx 
 

@@ -1,35 +1,47 @@
-dnf module disable nodejs -y
-dnf module enable nodejs:18 -y
+source common.sh
+component =backend
+
+dnf module disable nodejs -y >>$log_file
+echo $?
+dnf module enable nodejs:18 -y >>$log_file
+echo $?
 
 echo "downloading nodejs"
-dnf install nodejs -y
+dnf install nodejs -y >>$log_file
+echo $?
 
 echo "coping backend service file"
-cp backend.service /etc/systemd/system/backend.service
+cp backend.service /etc/systemd/system/$component.service >>$log_file
+echo $?
 
 echo "adding user"
-useradd expense
+useradd expense >>$log_file
+echo $?
 
-mkdir /app 
+mkdir /app
+cd /app 
 
-echo "downloading app content"
-curl -o /tmp/backend.zip https://expense-artifacts.s3.amazonaws.com/backend.zip 
+download and extract
+echo $?
 
-echo "extracting zipped files"
-unzip /tmp/backend.zip
 
-cd /app
 
-echo "downloading dependencies"
-npm install
+echo "downloading npm dependencies"
+npm install >>$log_file
+echo $?
 
 echo "reloading and starting backend"
- systemctl daemon-reload
- systemctl enable backend 
-systemctl start backend
+ systemctl daemon-reload >>$log_file
+ echo $?
+ systemctl enable backend >>$log_file
+ echo $?
+systemctl start backend >>$log_file
+echo $?
 
 echo "installing mysql database"
-dnf install mysql -y 
+dnf install mysql -y >>$log_file
+echo $?
 
 echo "running schema"
-mysql -h 172.31.7.189 -uroot -pExpenseApp@1 < /app/schema/backend.sql 
+mysql -h 172.31.7.189 -uroot -pExpenseApp@1 < /app/schema/$component.sql 
+echo $?
