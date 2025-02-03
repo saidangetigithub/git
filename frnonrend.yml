@@ -7,35 +7,35 @@
   tasks:
     - name: installing nginx
       ansible.builtin.dnf:
-        name: "{{ var}}"
+        name: "{{ app }}"
         state: present
         update_cache: true
 
     - name: copying configuration files
       ansible.builtin.copy:
         src: expense.conf
-        dest: /etc/"{{ var}}"/default.d/expense.conf
+        dest: /etc/"{{ app }}"/default.d/expense.conf
         mode: '0644' 
 
     - name: Remove file directory
       ansible.builtin.file:
-        path: /usr/share/"{{ var}}"/html
+        path: /usr/share/"{{ app }}"/html
         state: absent 
 
     - name: Remove file directory
       ansible.builtin.file:
-        path: /usr/share/"{{ var}}"/html
+        path: /usr/share/"{{ app }}"/html
         state: directory      
 
     - name: downloadd and extract the frontend content
       ansible.builtin.unarchive:
         src: https://expense-artifacts.s3.amazonaws.com/frontend.zip  
-        dest: /usr/share/"{{ var}}"/html
+        dest: /usr/share/"{{ app }}"/html
         remote_src: yes   
 
     - name: starting the nginx service
       ansible.builtin.systemd_service:
-        name: "{{ var}}"
+        name: "{{ app }}"
         state: restarted
         enabled: true    
 
