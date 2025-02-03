@@ -1,0 +1,56 @@
+---
+- name: installing backned for expense
+  hosts: all
+  become: yes
+  tasks:
+    - name: download nodejs dependencies
+      ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash 
+
+    - name: doenload  nodejs
+      ansible.builtin.dnf:
+        name: nodejs
+        state: present 
+
+    - name: coping backend service file
+      ansible.builtin.copy:
+        src: backend.service
+        dest: /etc/systemd/system/backend.service 
+
+    - name: adding expense user
+      ansible.builtin.user:
+        name: expense
+        create_home: yes 
+
+    - name: create a directory
+      ansible.builtin.file:
+        path: /app 
+        state: directory
+
+    - name: download and extract backend content 
+      ansible.builtin.unarchive: 
+        src: https://expense-artifacts.s3.amazonaws.com/backend.zip
+        dest: /app
+        remote_src: yes 
+
+    - name: download npm dependencies
+      ansible.builtin.shell: npm install
+      args:
+        chdir: /app 
+
+    - name: install mysql database
+      ansible.builtin.dnf: 
+        name: mysql 
+
+    - name: load schema
+      ansible.builtin.shell: mysql -h 172.31.31.154 -uroot -pExpenseApp@1 < /app/schema/backend.sql     
+
+    - name: start and enable service 
+      ansible.builtin.systemd_service:
+        name: backend
+        state: restarted
+        enabled: yes
+        deamon_reload: true
+
+        
+
+
