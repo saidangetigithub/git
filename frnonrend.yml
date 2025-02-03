@@ -2,7 +2,8 @@
 - name: installing expense app
   hosts: all
   become: yes
-  var: nginx
+  vars:
+    app: nginx
   tasks:
     - name: installing nginx
       ansible.builtin.dnf:
