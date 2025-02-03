@@ -14,28 +14,28 @@
     - name: copying configuration files
       ansible.builtin.copy:
         src: expense.conf
-        dest: /etc/"{{ app }}"/default.d/expense.conf
+        dest: /etc/nginx/default.d/expense.conf
         mode: '0644' 
 
     - name: Remove file directory
       ansible.builtin.file:
-        path: /usr/share/"{{ app }}"/html
+        path: /usr/share/nginx/html
         state: absent 
 
     - name: Remove file directory
       ansible.builtin.file:
-        path: /usr/share/"{{ app }}"/html
+        path: /usr/share/nginx/html
         state: directory      
 
     - name: downloadd and extract the frontend content
       ansible.builtin.unarchive:
         src: https://expense-artifacts.s3.amazonaws.com/frontend.zip  
-        dest: /usr/share/"{{ app }}"/html
+        dest: /usr/share/nginx/html
         remote_src: yes   
 
     - name: starting the "{{ app }}" service
       ansible.builtin.systemd_service:
-        name: "{{ app }}"
+        name: nginx
         state: restarted
         enabled: true    
 
