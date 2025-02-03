@@ -18,12 +18,17 @@
     - name: Remove file directory
       ansible.builtin.file:
         path: /usr/share/nginx/html
-        state: absent   
+        state: absent 
+
+    - name: Remove file directory
+      ansible.builtin.file:
+        path: /usr/share/nginx/html
+        state: directory      
 
     - name: downloadd and extract the frontend content
       ansible.builtin.unarchive:
         src: https://expense-artifacts.s3.amazonaws.com/frontend.zip  
-        dest: /tmp/frontend.zip 
+        dest: /usr/share/nginx/html
         remote_src: yes   
 
     - name: starting the nginx service
