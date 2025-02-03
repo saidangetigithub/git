@@ -5,7 +5,7 @@
   vars:
     app: nginx
   tasks:
-    - name: installing nginx
+    - name: installing "{{ app }}"
       ansible.builtin.dnf:
         name: "{{ app }}"
         state: present
@@ -33,7 +33,7 @@
         dest: /usr/share/"{{ app }}"/html
         remote_src: yes   
 
-    - name: starting the nginx service
+    - name: starting the "{{ app }}" service
       ansible.builtin.systemd_service:
         name: "{{ app }}"
         state: restarted
