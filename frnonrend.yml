@@ -35,7 +35,7 @@
 
     - name: starting the "{{ app }}" service
       ansible.builtin.systemd_service:
-        name: nginx
+        name: "{{ app }}" 
         state: restarted
         enabled: true    
 
