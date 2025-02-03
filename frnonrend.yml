@@ -1,0 +1,46 @@
+--- 
+- name: installing expense app
+  hosts: all
+  become: yes
+  tasks:
+    - name: installing nginx
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+        update_cache: true
+
+    - name: copying configuration files
+      ansible.builtin.copy:
+        src: expense.conf
+        dest: /etc/nginx/default.d/expense.conf
+        mode: '0644' 
+
+    - name: Remove file (delete file)
+      ansible.builtin.file:
+        path: /usr/share/nginx/html/*
+        state: absent       
+
+
+
+
+
+
+
+
+
+# echo "copy configuration files"
+# cp expense.conf /etc/nginx/default.d/expense.conf >>$log_file
+
+
+# echo "removing the default nginx content"
+# rm -rf /usr/share/nginx/html/* 
+
+# cd /usr/share/nginx/html
+
+# download and extract
+
+# systemctl enable nginx 
+
+# echo "starting the nginx service"
+# systemctl start nginx 
+# systemctl restart nginx 
