@@ -15,10 +15,22 @@
         dest: /etc/nginx/default.d/expense.conf
         mode: '0644' 
 
-    - name: Remove file (delete file)
+    - name: Remove file directory
       ansible.builtin.file:
-        path: /usr/share/nginx/html/*
-        state: absent       
+        path: /usr/share/nginx/html
+        state: absent   
+
+    - name: downloadd and extract the frontend content
+      ansible.builtin.unarchive:
+        src: https://expense-artifacts.s3.amazonaws.com/frontend.zip  
+        dest: /tmp/frontend.zip 
+        remote_src: yes   
+
+    - name: starting the nginx service
+      ansible.builtin.systemd_service:
+        name: nginx
+        state: restarted
+        enabled: true    
 
 
 
