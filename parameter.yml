@@ -1,0 +1,4 @@
+
+- name: lookup ssm parameter store in specified region
+  ansible.builtin.debug: 
+    msg="{{ lookup('amazon.aws.aws_ssm', 'sai', region='us-east-1' ) }}"
