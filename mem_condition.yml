@@ -1,0 +1,50 @@
+- name: put condition based on memory usage
+  hosts: localhost
+  become: yes
+  tasks: 
+    - name: print memory with free
+      ansible.builtin.shell: free | grep Mem | xargs
+      register: free
+
+    - name: printing the above variable
+      ansible.builtin.set_fact: 
+        FREE: "{{ free.stdout | split(' ') }}" 
+
+    - name: calculate memory usage
+      ansible.builtin.set_fact:
+        used_mem: "{{$FREE[3]|int / $FREE[1]|int * 100}}"    
+
+    - name: print the used memory
+      ansible.builtin.debug:
+        msg: "{{ used_mem }}" 
+
+    - name: memory green alert
+      ansible.builtin.debug:
+        msg: memory green alert
+      when: used_mem |int < 50        
+
+    - name: memory orange alert
+      ansible.builtin.debug:
+        msg: memory orange alert
+      when: used_mem |int > 50 and used_mem |int < 70       
+
+    - name: memory red alert
+      ansible.builtin.debug:
+        msg: memory red alert
+      when: used_mem |int > 70   
+
+# this is other way to calculate memory usage by using the ansible facts.ansible collects all the facts about nodes.
+    # - name: memory cal by using gathering facts and green alert
+    #   ansible.builtin.debug:
+    #     msg: memory green alert
+    #   when: ansible_memory_mb["real"]["free"] / ansible_memory_mb["real"]["total"] < 50             
+
+    # - name: memory orange alert
+    #   ansible.builtin.debug:
+    #     msg: memory orange alert
+    #   when: ansible_memory_mb["real"]["free"] / ansible_memory_mb["real"]["total"] > 50 and ansible_memory_mb["real"]["free"] / ansible_memory_mb["real"]["total"] < 70
+
+    # - name: memory red alert
+    #   ansible.builtin.debug:
+    #     msg: memory red alert
+    #   when: ansible_memory_mb["real"]["free"] / ansible_memory_mb["real"]["total"] > 70   
