@@ -1,6 +1,6 @@
-    - name: installing "{{ app }}"
+    - name: installing nginx
       ansible.builtin.dnf:
-        name: "{{ app }}"
+        name: nginx
         state: present
         update_cache: true
 
@@ -26,8 +26,8 @@
         dest: /usr/share/nginx/html
         remote_src: yes   
 
-    - name: starting the "{{ app }}" service
+    - name: starting the nginx service
       ansible.builtin.systemd_service:
-        name: "{{ app }}" 
+        name: nginx 
         state: restarted
         enabled: true    

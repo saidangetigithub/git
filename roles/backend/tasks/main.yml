@@ -1,10 +1,23 @@
+    - name: verify nodejs
+      ansible.builtin.shell: type npm 
+      register: npm
+      ignore_errors: true
+
+    # - name: read npm variable
+    #   ansible.builtin.debug:
+    #     msg: "{{ npm }}" 
+
+# when we run this in other vm its give error because of condition.
+# to ignore this we use ignore_error is yes
     - name: download nodejs dependencies
-      ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash 
+      ansible.builtin.shell: curl -sL https://rpm.nodesource.com/setup_lts.x | bash
+      when: npm.rc != 0 
 
     - name: doenload  nodejs
       ansible.builtin.dnf:
         name: nodejs
         state: present 
+      when: npm.rc != 0   
 
     - name: coping backend service file
       ansible.builtin.copy:
@@ -16,16 +29,21 @@
         name: expense
         create_home: yes 
 
-    - name: create a directory
-      ansible.builtin.file:
-        path: /app 
-        state: directory
+    - name: Run tasks from common role
+      ansible.builtin.import_role:
+        name: common
+        tasks_from: app_prereq   
 
-    - name: download and extract backend content 
-      ansible.builtin.unarchive: 
-        src: https://expense-artifacts.s3.amazonaws.com/backend.zip
-        dest: /app
-        remote_src: yes 
+    # - name: create a directory
+    #   ansible.builtin.file:
+    #     path: /app 
+    #     state: directory
+
+    # - name: download and extract backend content 
+    #   ansible.builtin.unarchive: 
+    #     src: https://expense-artifacts.s3.amazonaws.com/backend.zip
+    #     dest: /app
+    #     remote_src: yes 
 
     - name: download npm dependencies
       ansible.builtin.shell: npm install
