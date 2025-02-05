@@ -5,10 +5,15 @@
         update_cache: true
 
     - name: copying configuration files
-      ansible.builtin.copy:
+      ansible.builtin.template:
         src: expense.conf
         dest: /etc/nginx/default.d/expense.conf
         mode: '0644' 
+
+    - name: copying nginx config file 
+      ansible.builtin.template:
+        src: nginx.conf 
+        dest: /var/log/nginx/nginx.conf    
 
     - name: Remove file directory
       ansible.builtin.file:
@@ -31,3 +36,5 @@
         name: nginx 
         state: restarted
         enabled: true    
+
+
