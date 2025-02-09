@@ -1,0 +1,5 @@
+- name: deploying the expense app 
+  host: all 
+  become: yes 
+  roles:
+    - {{ role_name }}
