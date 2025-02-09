@@ -20,7 +20,7 @@
         path: /usr/share/nginx/html
         state: absent 
 
-    - name: Remove file directory
+    - name: create file directory
       ansible.builtin.file:
         path: /usr/share/nginx/html
         state: directory      
@@ -35,6 +35,13 @@
       ansible.builtin.systemd_service:
         name: nginx 
         state: restarted
-        enabled: true    
+        enabled: true  
+
+    - name: importing the node exporter
+      ansible.builtin.import_role:
+        name: prometheus 
+        tasks_from: nodeecporter
+
+            
 
 
