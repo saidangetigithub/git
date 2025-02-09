@@ -2,4 +2,4 @@
   host: all 
   become: yes 
   roles:
-    - {{ role_name }}
+    - {{ "role_name" }}
