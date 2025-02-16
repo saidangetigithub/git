@@ -9,8 +9,9 @@
     src: nodeexporter.service
     dest: /etc/systemd/system/nodeexporter.service
 
-- name: starting the service
+- name: starting the node exporter service
   ansible.builtin.systemd_service:
+    name: nodeexporter.service
     state: restarted
     deamon_reload: yes
     enable: yes
