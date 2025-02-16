@@ -13,6 +13,6 @@
   ansible.builtin.systemd_service:
     name: nodeexporter.service
     state: restarted
-    deamon_reload: yes
-    enable: yes
+    deamon_reload: true
+    enable: true
            
