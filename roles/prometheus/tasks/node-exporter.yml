@@ -14,5 +14,5 @@
     name: nodeexporter.service
     state: restarted
     deamon_reload: true
-    enable: true
+    enabled: true
            
