@@ -1,0 +1,11 @@
+[Unit]
+Description = Backend Service
+
+[Service]
+User=expense
+
+ExecStart=/opt/node_exporter-1.8.2.linux-amd64
+SyslogIdentifier=node-exporter
+
+[Install]
+WantedBy=multi-user.target
